@@ -25,9 +25,25 @@
 		"name": "buildDir",
 		"type": "string",
 		"label": "Build dir path",
-		"defaultValue": "$(Agent.BuildDirectory)",
+		"defaultValue": "Build.ArtifactStagingDirectory",
 		"required": false,
-		"helpMarkDown": "Personal access token for writing comment"
+		"helpMarkDown": "Path to the build directory. By default $(Build.ArtifactStagingDirectory)"
+	    },
+	    {
+		"name": "staticFilePath",
+		"type": "string",
+		"label": "Static Javascript Path",
+		"defaultValue": "js/*.js",
+		"required": false,
+		"helpMarkDown": "default value will be build/js/*.js"
+	    },
+	    {
+		"name": "baseBranch",
+		"type": "string",
+		"label": "Base branch(master)",
+		"defaultValue": "master",
+		"required": false,
+		"helpMarkDown": "By default master"
 	    }
 	],
 	"execution": {
