@@ -31,7 +31,10 @@ async function main() {
     await sourceMapRunner(staticFilesPath)
       .then((response: any) => response.results)
       .then((result) => getMarkdownFromJson(result))
-      .then((html) => console.log(html))
+      .then((html) => {
+        //create comment
+        console.log(html);
+      })
       .catch((e) => {
         throw e;
       });

@@ -41,7 +41,7 @@ function getBundleRows(results: any) {
 function getBundleCell(bundle: Record<string, any>) {
   let tableCell = "";
 
-  Object.entries(bundle.files).forEach(([fileName, size]) => {
+  Object.entries(bundle.files).forEach(([fileName, { size }]: any) => {
     tableCell += `
 					<li>
 						${fileName} ---- Size: ${formatBytes(Number(size))}
