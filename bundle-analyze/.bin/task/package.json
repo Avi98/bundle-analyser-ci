@@ -1,0 +1,38 @@
+{
+  "name": "bundle-analyser-ci",
+  "version": "1.0.0",
+  "description": "azure pipeline bundle analyser for create react app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "buildTaskV0": "rimraf .bin && tsc -b . && NODE_ENV=production && copyfiles -f ./tasks/bundle-analyzerV0/task.json package.json ./.bin/task",
+    "buildTaskV1": "rimraf .bin && tsc -b . && NODE_ENV=production && copyfiles -f ./tasks/bundle-analyzerV1/task.json package.json ./.bin/task",
+    "packTaskV0": "npm run buildTaskV0 && copyfiles vss-extension.json vss-extension-icon.png LICENSE.md README.md ./.bin && loop \"npm install --only=prod\" --cwd ./.bin/task",
+    "packTaskV1": "npm run buildTaskV1 && copyfiles vss-extension.json vss-extension-icon.png LICENSE.md README.md ./.bin && loop \"npm install --only=prod\" --cwd ./.bin/task",
+    "create": "tfx extension create -r .bin",
+    "watch": "tsc -w",
+    "dev": "nodemon .bin/task/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Avi98/bundle-analyser-ci.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Avi98/bundle-analyser-ci/issues"
+  },
+  "homepage": "https://github.com/Avi98/bundle-analyser-ci#readme",
+  "devDependencies": {
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.0.3",
+    "copyfiles": "^2.4.1",
+    "nodemon": "^2.0.19",
+    "rimraf": "^3.0.2",
+    "sync-request": "^6.1.0"
+  },
+  "dependencies": {
+    "azure-pipelines-task-lib": "^3.3.1",
+    "typed-rest-client": "^1.8.9"
+  }
+}

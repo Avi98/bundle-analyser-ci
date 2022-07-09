@@ -1,0 +1,35 @@
+{
+	"manifestVersion": 1,
+	"id": "5fe3e030-1add-6a2c-89b1-3dc0949111c0",
+	"name": "React app's bundle analyzer",
+	"version": "0.0.1",
+	"publisher": "Avinash",
+	"targets": [
+	    {
+		"id": "Microsoft.VisualStudio.Services"
+	    }
+	],    
+	"description": "Get bundle analysis of your react app in CI/CD pipeline",
+	"categories": ["Azure Pipelines"],
+	"icons": {
+	    "default": "vss-extension-icon.png"        
+	},
+	"files": [
+	    {
+		"path": "task"
+	    }
+	],
+	"contributions": [
+	    {
+		"id": "",
+		"type": "ms.vss-distributed-task.task",
+		"targets": [
+		    "ms.vss-distributed-task.tasks"
+		],
+		"description":"Get bundle analysis of your react app in CI/CD pipeline",
+		"properties": {
+		    "title": "View bundle report in PR comments"
+		}
+	    }
+	]
+    }

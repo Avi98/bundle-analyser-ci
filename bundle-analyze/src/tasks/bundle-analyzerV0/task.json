@@ -1,0 +1,38 @@
+{
+	"$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+	"id": "6ac207cb-0234-4c08-a272-c4937ad7a92c",
+	"name": "CRA-bundle-analyzer",
+	"friendlyName": "Get bundle size",
+	"description": "Get bundle info of the react application",
+	"helpMarkDown": "",
+	"category": "Azure Pipeline",
+	"author": "Avinash",
+	"version": {
+	    "Major": 0,
+	    "Minor": 1,
+	    "Patch": 0
+	},
+	"instanceNameFormat": "estimating bundle size",
+	"inputs": [
+	    {
+		"name": "PAT",
+		"type": "string",
+		"label": "Personal access token",
+		"required": true,
+		"helpMarkDown": "Personal access token for writing comment"
+	    },
+	    {
+		"name": "buildDir",
+		"type": "string",
+		"label": "Build dir path",
+		"defaultValue": "$(Agent.BuildDirectory)",
+		"required": false,
+		"helpMarkDown": "Personal access token for writing comment"
+	    }
+	],
+	"execution": {
+	    "Node10": {
+		"target": "index.js"
+	    }
+	}
+    }
