@@ -3,6 +3,9 @@ import { formatBytes } from "./utils";
 /**
  * generate table something like this
  *
+ *
+ *
+ *
  * |------------File/chunk Name-------------------------------------------------|----size-----|
  * | build/static/js/0.bc01d36c.chunk.js"            	       		        |     32M     |
  * |  1. assets/icons/ic-sort.svg " ----  size:21M   			        |             |
@@ -27,12 +30,15 @@ function getBundleRows(results: any) {
   results.forEach((bundle: any) => {
     tableCell += `
   					  <tr>
-					  ${bundle.bundleName}
-					  	<ol>
-						  ${getBundleCell(bundle)}
-						</ol>
-					  </tr>
-  					  <tr>${formatBytes(Number(bundle.totalBytes))}
+					     <td>
+						${bundle.bundleName}
+						<Details>
+						<summary><b>Expand to get more insights</b></summary>
+							${getBundleCell(bundle)}
+						</Details>
+					    <td>
+					     <td>${formatBytes(Number(bundle.totalBytes))}</td>
+					   </tr>
   				  `;
   });
   console.log({ tableCell });
@@ -42,11 +48,7 @@ function getBundleCell(bundle: Record<string, any>) {
   let tableCell = "";
 
   Object.entries(bundle.files).forEach(([fileName, { size }]: any) => {
-    tableCell += `
-					<li>
-						${fileName} ---- Size: ${formatBytes(Number(size))}
-					<li>
-				`;
+    tableCell += `* ${fileName} ---- Size: ${formatBytes(Number(size))}`;
   });
   return tableCell;
 }
