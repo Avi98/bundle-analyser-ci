@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-	"id": "6ac207cb-0234-4c08-a272-c4937ad7a92c",
+	"id": "1629514b-06c5-4f3e-8a62-dc1c498f1726",
 	"name": "CRA-bundle-analyzer",
 	"friendlyName": "Get bundle size",
 	"description": "Get bundle info of the react application",
