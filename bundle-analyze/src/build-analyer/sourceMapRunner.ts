@@ -39,6 +39,6 @@ function runSourceMap(buildPath: string) {
     rej(
       `${DEFAULT_OUTPUT_FORMATE} didn't generated while running ${SOURCE_MAP_EXP}`
     );
-  res(source);
+  res(JSON.parse(source.stdout));
   return promise;
 }
