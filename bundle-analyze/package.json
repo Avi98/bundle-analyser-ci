@@ -34,6 +34,7 @@
     "sync-request": "^6.1.0"
   },
   "dependencies": {
+    "azure-devops-node-api": "11.2.0",
     "azure-pipelines-task-lib": "^3.3.1",
     "source-map-explorer": "^2.5.2",
     "typed-rest-client": "^1.8.9"

@@ -2,7 +2,7 @@ require("dotenv").config();
 
 import * as path from "path";
 import { variables } from "./utils/userInputs";
-import { sourceMapRunner } from "./build-analyer/sourceMapRunner";
+import { sourceMapRunner } from "./sourceMapRunner";
 import { debug, setResult, TaskResult } from "azure-pipelines-task-lib";
 import { getMarkdownFromJson } from "./reportGenrator/getMarkdown";
 
@@ -11,9 +11,9 @@ main();
  * 1. get build dir path 👍
  * 2. npm install source-map-explorer 👍
  * if install then get 👍
- * 3. read csv data 👍
+ * 3. read json data 👍
  * 4. generate table for all the report. 👍
- * 5. create a azure comment and send it on PR.
+ * 5. create a  comment thread and send it on PR. 👍
  * 6. publish on azure
  * 8. create a README.md file
  */

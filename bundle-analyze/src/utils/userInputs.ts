@@ -36,7 +36,7 @@ export const variables = {
         : getNonNullVariable("System.TeamFoundationCollectionUri")!,
       PullRequestId: isDev
         ? process.env.PULL_REQUEST_ID!
-        : getNonNullVariable("System.PullRequest.PullRequestId"),
+        : Number(getNonNullVariable("System.PullRequest.PullRequestId")),
     },
 
     //---- debug
