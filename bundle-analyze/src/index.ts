@@ -1,5 +1,4 @@
-require("dotenv").config();
-
+import "dotenv/config";
 import * as path from "path";
 import { variables } from "./utils/userInputs";
 import { sourceMapRunner } from "./sourceMapRunner";

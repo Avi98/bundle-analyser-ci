@@ -1,7 +1,7 @@
 {
 	"$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
 	"id": "1629514b-06c5-4f3e-8a62-dc1c498f1726",
-	"name": "CRA-bundle-analyzer",
+	"name": "Bundle-Analysis",
 	"friendlyName": "Get bundle size",
 	"description": "Get bundle info of the react application",
 	"helpMarkDown": "",
@@ -10,26 +10,35 @@
 	"version": {
 	    "Major": 1,
 	    "Minor": 1,
-	    "Patch": 0
+	    "Patch": 2
 	},
 	"instanceNameFormat": "estimating bundle size",
 	"inputs": [
-	    {
-		"name": "PAT",
-		"type": "string",
-		"label": "Personal access token",
-		"required": true,
-		"helpMarkDown": "Personal access token for writing comment"
-	    },
-	    {
-		"name": "buildDir",
-		"type": "string",
-		"label": "Build dir path",
-		"defaultValue": "$(Agent.BuildDirectory)",
-		"required": false,
-		"helpMarkDown": "Personal access token for writing comment"
-	    }
-	],
+			{
+			    "name": "buildDir",
+			    "type": "string",
+			    "label": "Build dir path",
+			    "defaultValue": "Build.ArtifactStagingDirectory",
+			    "required": false,
+			    "helpMarkDown": "Path to the build directory. By default $(Build.ArtifactStagingDirectory)"
+			},
+			{
+			    "name": "staticFilePath",
+			    "type": "string",
+			    "label": "Static Javascript Path",
+			    "defaultValue": "js/*.js",
+			    "required": false,
+			    "helpMarkDown": "default value will be build/js/*.js"
+			},
+			{
+			    "name": "baseBranch",
+			    "type": "string",
+			    "label": "Base branch(master)",
+			    "defaultValue": "master",
+			    "required": false,
+			    "helpMarkDown": "By default master"
+			}
+		    ],
 	"execution": {
 	    "Node10": {
 		"target": "index.js"
