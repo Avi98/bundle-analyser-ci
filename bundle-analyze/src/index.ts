@@ -1,8 +1,9 @@
 import "dotenv/config";
 import * as path from "path";
+import { debug, setResult, TaskResult } from "azure-pipelines-task-lib";
 import { variables } from "./utils/userInputs";
 import { sourceMapRunner } from "./sourceMapRunner";
-import { debug, setResult, TaskResult } from "azure-pipelines-task-lib";
+import { Comment } from "./utils/comment";
 import { getMarkdownFromJson } from "./reportGenrator/getMarkdown";
 
 main();
@@ -30,9 +31,9 @@ async function main() {
     await sourceMapRunner(staticFilesPath)
       .then((response: any) => response.results)
       .then((result) => getMarkdownFromJson(result))
-      .then((html) => {
-        //create comment
-        console.log(html);
+      .then(async (html) => {
+        const comment = new Comment();
+        await comment.createComment(html);
       })
       .catch((e) => {
         throw e;
