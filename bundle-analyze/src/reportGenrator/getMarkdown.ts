@@ -41,7 +41,6 @@ function getBundleRows(results: any) {
 					   </tr>
   				  `;
   });
-  console.log({ tableCell });
   return tableCell;
 }
 function getBundleCell(bundle: Record<string, any>) {

@@ -2,7 +2,7 @@
 	"manifestVersion": 1,
 	"id": "1629514b-06c5-4f3e-8a62-dc1c498f1726",
 	"name": "Bundle-Analyzer",
-	"version": "0.0.3",
+	"version": "0.0.12",
 	"publisher": "pref-monitor-ci",
 	"targets": [
 	    {
@@ -21,17 +21,16 @@
 	],
 	"contributions": [{
 		"id": "service-endpoint",
-		"description": "Service Endpoint type for Azure DevOps PAT",
+		"description": "Service Endpoint type for CRA bundle-analyzer",
 		"type": "ms.vss-endpoint.service-endpoint-type",
-		"targets": ["ms.vss-endpoint.endpoint-types"],
+		"targets": [ "ms.vss-endpoint.endpoint-types" ],
 		"properties": {
-		  "name": "Azure-build",
-		  "displayName": "Build analysis for CRA apps.",
-		  "config": {
-		    "type": "string",
-		    "description": "Put your Personal Access Token of the Azure DevOps",
-		    "required": true
-		  },
+		  "name": "CRA-bundle",
+		  "displayName": "Bundle analyzer connection",
+		  "url": {
+			"displayName": "Server Url",
+			"helpText": "URL for Project server to connect to"
+		      },
 		  "authenticationSchemes": [
 		    {
 		      "type": "ms.vss-endpoint.endpoint-auth-scheme-none",

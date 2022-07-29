@@ -1,3 +1,4 @@
+require("dotenv").config();
 import { getPersonalAccessTokenHandler, WebApi } from "azure-devops-node-api";
 import { IGitApi } from "azure-devops-node-api/GitApi";
 import { GitPullRequestCommentThread } from "azure-devops-node-api/interfaces/GitInterfaces";
@@ -10,14 +11,15 @@ export class Comment {
   #client: null | Promise<IGitApi>;
 
   constructor() {
-    this.#client = this.initClient()!;
     this.#PAT = variables.Env.Params.PAT;
     this.#serverURL = variables.Env.System.ServerURL;
+    this.#client = this.initClient(this.#PAT, this.#serverURL)!;
   }
 
-  private initClient() {
-    const pat = this.#PAT;
-    const serverUrl = this.#serverURL;
+  private initClient(pat: string, serverUrl: string) {
+    debug(`PAT- ${pat}`);
+    debug(`ServerUrl- ${serverUrl}`);
+
     if (!pat || !serverUrl) return;
 
     const handler = getPersonalAccessTokenHandler(pat);
@@ -34,6 +36,9 @@ export class Comment {
   ) {
     (await this.#client)
       ?.createThread(markdown, repoId, pullReqId)
+      .then(() => {
+        debug("created new thread");
+      })
       .catch(() => {
         throw new Error("New comment thread not created");
       });
@@ -54,18 +59,21 @@ export class Comment {
   }
 
   private async getAllThreads(pullReqId: number, repoId: string) {
-    return this.#client?.then(
+    return await this.#client?.then(
       async ({ getThreads }) => await getThreads(repoId, pullReqId)
     );
   }
 
   async createComment(markdown: string) {
-    const pullReqId = variables.Env.System.PullRequestId;
+    const pullReqId = Number(variables.Env.System.PullRequestId);
     const repoId = variables.Env.Params.RepositoryId;
     debug("----creating comment----");
-
     try {
-      if (!(pullReqId && typeof pullReqId === "number")) return;
+      if (!(pullReqId && typeof pullReqId === "number")) {
+        throw new Error("PullReqId not found");
+      }
+
+      debug(`pullReqId--${pullReqId}\n`);
 
       const commentPayload = <GitPullRequestCommentThread>{
         comments: [
@@ -78,6 +86,8 @@ export class Comment {
         },
       };
       const allThreads = await this.getAllThreads(pullReqId, repoId);
+      debug(`AllThreads length - ${allThreads?.length}\n`);
+
       if (!allThreads) return;
       if (allThreads?.length === 0)
         await this.createNewThread(pullReqId, repoId, commentPayload);
@@ -91,6 +101,7 @@ export class Comment {
             thread.id
           );
         } else {
+          debug(`Creating new thread`);
           await this.createNewThread(pullReqId, repoId, commentPayload);
         }
       }

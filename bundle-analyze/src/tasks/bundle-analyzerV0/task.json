@@ -2,7 +2,7 @@
 	"$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
 	"id": "1629514b-06c5-4f3e-8a62-dc1c498f1726",
 	"name": "Bundle-Analysis",
-	"friendlyName": "Get bundle size",
+	"friendlyName": "Bundle-Analysis",
 	"description": "Get bundle info of the react application",
 	"helpMarkDown": "",
 	"category": "Azure Pipeline",
@@ -29,6 +29,13 @@
 		"defaultValue": "js/*.js",
 		"required": false,
 		"helpMarkDown": "default value will be build/js/*.js"
+	    },
+	    {
+		"name": "azureDevopsService",
+		"type": "string",
+		"label": "Service Name",
+		"required": true,
+		"helpMarkDown": "Name of the service for connecting and getting token"
 	    },
 	    {
 		"name": "baseBranch",

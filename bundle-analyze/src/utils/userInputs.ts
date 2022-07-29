@@ -1,40 +1,35 @@
+require("dotenv").config();
+
 import { getInput, getVariable } from "azure-pipelines-task-lib";
 
 export const isDev = process.env.NODE_ENV === "development";
+
 export const variables = {
   //----env
   Env: {
     //----params
     Params: {
       SourceDirectory: getNonNullVariable("build.sourcesDirectory")!,
-      BuildDirectory: getInput("buildDir"),
-      StaticBuildPath: getInput("staticFilePath"),
-      RepositoryId: isDev
-        ? process.env.REPOSITORY_ID!
-        : getNonNullVariable("Build.Repository.ID"),
-      PAT: isDev ? process.env.PAT : getInput("PAT"),
+      BuildDirectory: getUserInput("buildDir"),
+      StaticBuildPath: getUserInput("staticFilePath"),
+      RepositoryId: getNonNullVariable("Build.Repository.ID"),
+      PAT: getUserInput("pat"),
     },
     Agent: {
       JobStatus: getNonNullVariable("AGENT_JOB_STATUS"),
       Name: getNonNullVariable("AGENT_NAME"),
-      TempDir: isDev
-        ? process.env.temDir!
-        : getNonNullVariable("AGENT_TEMPDIRECTORY"),
+      TempDir: getNonNullVariable("AGENT_TEMPDIRECTORY"),
     },
     System: {
       AccessToken: getNonNullVariable("SYSTEM_ACCESSTOKEN"),
       DefinitionName: getNonNullVariable("SYSTEM_DEFINITIONNAME"),
       TeamFoundationServerUri: getNonNullVariable(
-        "SYSTEM_TEAMFOUNDATIONSERVERURI"
+        "System.TeamFoundationCollectionUri"
       ),
-      TeamProject: getNonNullVariable("SYSTEM_TEAMPROJECT"),
+      TeamProject: getNonNullVariable("System.teamProject"),
       SourceDir: getNonNullVariable("BUILD_SOURCE_DIRECTORY"),
-      ServerURL: isDev
-        ? process.env.SERVER_URL!
-        : getNonNullVariable("System.TeamFoundationCollectionUri")!,
-      PullRequestId: isDev
-        ? process.env.PULL_REQUEST_ID!
-        : Number(getNonNullVariable("System.PullRequest.PullRequestId")),
+      ServerURL: getNonNullVariable("System.TeamFoundationCollectionUri")!,
+      PullRequestId: getNonNullVariable("System.PullRequest.PullRequestId")!,
     },
 
     //---- debug
@@ -45,9 +40,21 @@ export const variables = {
 };
 
 function getNonNullVariable(name: string) {
+  if (isDev) {
+    const envStr = name.replace(/\./g, "_").toUpperCase()!;
+    return process.env[envStr]!;
+  }
   const v = getVariable(name);
 
   if (!v) return "";
 
   return v;
+}
+
+function getUserInput(inputString: string): string {
+  if (isDev) {
+    const envString = `INPUT_${inputString.toUpperCase()}`;
+    return process.env[envString]!;
+  }
+  return getInput(inputString)!;
 }
