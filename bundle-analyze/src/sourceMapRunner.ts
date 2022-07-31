@@ -26,7 +26,6 @@ async function installSourceMap() {
 }
 
 function runSourceMap(buildPath: string) {
-  console.log({ buildPath });
   const sourceMap = spawn(SOURCE_MAP_EXP, [buildPath, DEFAULT_OUTPUT_FORMATE]);
 
   let res: any;
@@ -44,7 +43,6 @@ function runSourceMap(buildPath: string) {
     } else {
       if (result && result?.length !== 0) {
         res(Buffer.concat(result).toString("utf8"));
-        console.log("Completed Reading code");
       }
       rej("\nError in Buffer concat\n");
     }

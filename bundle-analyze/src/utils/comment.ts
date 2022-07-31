@@ -1,31 +1,46 @@
 import { getPersonalAccessTokenHandler, WebApi } from "azure-devops-node-api";
 import { IGitApi } from "azure-devops-node-api/GitApi";
-import { GitPullRequestCommentThread } from "azure-devops-node-api/interfaces/GitInterfaces";
+import {
+  Comment as IComment,
+  GitPullRequestCommentThread,
+} from "azure-devops-node-api/interfaces/GitInterfaces";
 import { debug } from "azure-pipelines-task-lib";
 import { variables } from "../utils/userInputs";
 
 export class Comment {
-  #serverURL: string | undefined;
-  #PAT: string | undefined;
-  #client: null | Promise<IGitApi>;
+  private serverURL: string;
+  private PAT: string;
+  private client: ReturnType<typeof this.initClient>;
 
   constructor() {
-    this.#PAT = variables.Env.Params.PAT;
-    this.#serverURL = variables.Env.System.ServerURL;
-    this.#client = this.initClient(this.#PAT, this.#serverURL)!;
+    this.PAT = variables.Env.Params.PAT;
+    this.serverURL = variables.Env.System.ServerURL;
+
+    //initialize and connect to vss server
+    this.init();
   }
 
-  private initClient(pat: string, serverUrl: string) {
+  private init() {
+    if (!this.PAT || !this.serverURL) throw new Error("Faild in initialize");
+    const vm = this.initClient(this.PAT, this.serverURL)!;
+    if (vm) this.client = vm;
+  }
+
+  private async initClient(pat: string, serverUrl: string) {
     debug(`PAT- ${pat}`);
     debug(`ServerUrl- ${serverUrl}`);
+    try {
+      if (!pat || !serverUrl) return;
 
-    if (!pat || !serverUrl) return;
+      const handler = getPersonalAccessTokenHandler(pat);
+      const connection = new WebApi(serverUrl, handler);
+      await connection.connect();
 
-    const handler = getPersonalAccessTokenHandler(pat);
-    const connection = new WebApi(serverUrl, handler);
-
-    debug("----connection established----");
-    return connection.getGitApi();
+      return connection.getGitApi();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 
   private async createNewThread(
@@ -33,13 +48,13 @@ export class Comment {
     repoId: string,
     markdown: GitPullRequestCommentThread
   ) {
-    (await this.#client)
+    (await this.client)
       ?.createThread(markdown, repoId, pullReqId)
       .then(() => {
         debug("created new thread");
       })
-      .catch(() => {
-        throw new Error("New comment thread not created");
+      .catch((e) => {
+        throw e;
       });
   }
 
@@ -49,7 +64,7 @@ export class Comment {
     markdown: GitPullRequestCommentThread,
     threadId: number
   ) {
-    (await this.#client)
+    (await this.client)
       ?.updateThread(markdown, repoId, pullReqId, threadId)
       .then(() => debug("----updated comment----"))
       .catch((e) => {
@@ -58,22 +73,23 @@ export class Comment {
   }
 
   private async getAllThreads(pullReqId: number, repoId: string) {
-    console.log({ cline: this.#client });
-    return await this.#client
-      ?.then(async ({ getThreads }) => {
+    return await this.client
+      ?.then(async (vm) => {
+        if (!vm?.getThreads) return;
         console.log(repoId, pullReqId);
-        return await getThreads(repoId, pullReqId, "bookshelf");
+        return await vm.getThreads(repoId, pullReqId, "bookshelf");
       })
       .then((res) => res)
       .catch((e) => {
-        console.log("error for creating threads");
-        console.error(e);
+        throw e;
       });
   }
 
-  async createComment(markdown: string) {
-    await this.#client;
+  private isThreadEmpty(comments: IComment[]) {
+    return Boolean(comments.filter((c) => c.isDeleted).length);
+  }
 
+  async createComment(markdown: string) {
     const pullReqId = Number(variables.Env.System.PullRequestId);
     const repoId = variables.Env.Params.RepositoryId;
 
@@ -84,7 +100,6 @@ export class Comment {
       }
 
       debug(`pullReqId--${pullReqId}\n`);
-
       const commentPayload = <GitPullRequestCommentThread>{
         comments: [
           {
@@ -103,7 +118,12 @@ export class Comment {
         await this.createNewThread(pullReqId, repoId, commentPayload);
 
       for (const thread of allThreads) {
-        if (thread.properties["bundle-analysis"] && thread.id) {
+        if (
+          thread.comments &&
+          thread.properties["bundle-analysis"] &&
+          thread.id &&
+          !this.isThreadEmpty(thread.comments)
+        ) {
           await this.updateExistingThread(
             pullReqId,
             repoId,
