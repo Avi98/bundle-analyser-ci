@@ -1,7 +1,8 @@
 import { tool, which } from "azure-pipelines-task-lib";
-import { spawn } from "child_process";
-require("dotenv");
+import { exec, spawn, spawnSync } from "child_process";
+import { stderr } from "process";
 
+require("dotenv").config();
 const SOURCE_MAP_EXP = "source-map-explorer";
 const DEFAULT_OUTPUT_FORMATE = "--json";
 
@@ -25,10 +26,8 @@ async function installSourceMap() {
 }
 
 function runSourceMap(buildPath: string) {
-  //@TODO: remove it before pushing
-  const b = "'/Users/avinash/work/agent-dashboard/build/static/js/*.js'";
-
-  const sourceMap = spawn(SOURCE_MAP_EXP, [b, DEFAULT_OUTPUT_FORMATE]);
+  console.log({ buildPath });
+  const sourceMap = spawn(SOURCE_MAP_EXP, [buildPath, DEFAULT_OUTPUT_FORMATE]);
 
   let res: any;
   let rej: any;
@@ -39,27 +38,28 @@ function runSourceMap(buildPath: string) {
     rej = reject;
   });
 
-  sourceMap.on("error", (error) => rej(error));
   sourceMap.on("exit", (code) => {
     if (code === 1) {
-      rej("\nError occurred in" + SOURCE_MAP_EXP + "\n");
+      console.error("\nError occurred in " + SOURCE_MAP_EXP + "\n");
     } else {
-      if (result && result?.length !== 0)
+      if (result && result?.length !== 0) {
         res(Buffer.concat(result).toString("utf8"));
+        console.log("Completed Reading code");
+      }
       rej("\nError in Buffer concat\n");
     }
   });
+
+  sourceMap.on("error", (e) => console.log("e", e));
 
   sourceMap.stdout.on("data", (data) => {
     //@ts-expect-error
     result?.push(Buffer.from(data));
   });
 
-  if (!sourceMap || !sourceMap.stdout) {
-    rej(
-      `${DEFAULT_OUTPUT_FORMATE} didn't generated while running ${SOURCE_MAP_EXP}`
-    );
-  }
+  sourceMap.stderr.on("error", (error) => {
+    rej(error);
+  });
 
   return promise;
 }

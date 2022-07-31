@@ -19,7 +19,13 @@
 			"preLaunchTask": "tsc: build - bundle-analyze/tsconfig.json",
 			"outFiles": [
 				"${workspaceFolder}/bundle-analyze/.bin/task/*.js"
-			]
+			],
+			"resolveSourceMapLocations":[
+				"${workspaceFolder}/bundle-analyze/.bin/tasks/**",
+				"!**/bundle-analyze/node_modules/**"
+			],
+			"sourceMaps": true,
+			"smartStep": true
 		}
 	]
 }

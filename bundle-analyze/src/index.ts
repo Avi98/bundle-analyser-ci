@@ -2,7 +2,7 @@ require("dotenv").config();
 
 import * as path from "path";
 import { debug, setResult, TaskResult } from "azure-pipelines-task-lib";
-import { variables } from "./utils/userInputs";
+import { isDev, variables } from "./utils/userInputs";
 import { sourceMapRunner } from "./sourceMapRunner";
 import { Comment } from "./utils/comment";
 import { getMarkdownFromJson } from "./reportGenrator/getMarkdown";
@@ -19,19 +19,20 @@ import { getMarkdownFromJson } from "./reportGenrator/getMarkdown";
  */
 
 const buildDir = variables.Env.Params.BuildDirectory;
-const staticFilePattern = variables.Env.Params.StaticBuildPath;
+const staticFilePattern = !isDev
+  ? variables.Env.Params.StaticBuildPath
+  : "/static/js/*.js";
 
-// const staticFilesPath = path.join(buildDir, staticFilePattern);
+const staticFilesPath = path.join(buildDir, staticFilePattern);
 
-console.log({ version: "0.0.12" });
+console.log({ version: "0.0.15" });
 
-sourceMapRunner("")
+sourceMapRunner(staticFilesPath)
   .then((res: any) => JSON.parse(res))
   .then((result) => {
     return getMarkdownFromJson(result.results);
   })
   .then(async (html) => {
-    console.log({ html });
     const comment = new Comment();
     await comment.createComment(html);
   })

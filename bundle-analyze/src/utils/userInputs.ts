@@ -3,7 +3,6 @@ require("dotenv").config();
 import { getInput, getVariable } from "azure-pipelines-task-lib";
 
 export const isDev = process.env.NODE_ENV === "development";
-
 export const variables = {
   //----env
   Env: {

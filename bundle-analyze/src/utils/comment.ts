@@ -1,4 +1,3 @@
-require("dotenv").config();
 import { getPersonalAccessTokenHandler, WebApi } from "azure-devops-node-api";
 import { IGitApi } from "azure-devops-node-api/GitApi";
 import { GitPullRequestCommentThread } from "azure-devops-node-api/interfaces/GitInterfaces";
@@ -59,14 +58,25 @@ export class Comment {
   }
 
   private async getAllThreads(pullReqId: number, repoId: string) {
-    return await this.#client?.then(
-      async ({ getThreads }) => await getThreads(repoId, pullReqId)
-    );
+    console.log({ cline: this.#client });
+    return await this.#client
+      ?.then(async ({ getThreads }) => {
+        console.log(repoId, pullReqId);
+        return await getThreads(repoId, pullReqId, "bookshelf");
+      })
+      .then((res) => res)
+      .catch((e) => {
+        console.log("error for creating threads");
+        console.error(e);
+      });
   }
 
   async createComment(markdown: string) {
+    await this.#client;
+
     const pullReqId = Number(variables.Env.System.PullRequestId);
     const repoId = variables.Env.Params.RepositoryId;
+
     debug("----creating comment----");
     try {
       if (!(pullReqId && typeof pullReqId === "number")) {
@@ -86,9 +96,9 @@ export class Comment {
         },
       };
       const allThreads = await this.getAllThreads(pullReqId, repoId);
+      if (!allThreads) return;
       debug(`AllThreads length - ${allThreads?.length}\n`);
 
-      if (!allThreads) return;
       if (allThreads?.length === 0)
         await this.createNewThread(pullReqId, repoId, commentPayload);
 
