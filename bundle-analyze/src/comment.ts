@@ -5,7 +5,7 @@ import {
   GitPullRequestCommentThread,
 } from "azure-devops-node-api/interfaces/GitInterfaces";
 import { debug } from "azure-pipelines-task-lib";
-import { variables } from "../utils/userInputs";
+import { variables } from "./utils/userInputs";
 
 export class Comment {
   private serverURL: string;

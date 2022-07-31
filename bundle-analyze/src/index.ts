@@ -4,7 +4,7 @@ import * as path from "path";
 import { debug, setResult, TaskResult } from "azure-pipelines-task-lib";
 import { isDev, variables } from "./utils/userInputs";
 import { sourceMapRunner } from "./sourceMapRunner";
-import { Comment } from "./utils/comment";
+import { Comment } from "./comment";
 import { getMarkdownFromJson } from "./reportGenrator/getMarkdown";
 
 /**
@@ -37,7 +37,5 @@ sourceMapRunner(staticFilesPath)
     await comment.createComment(html);
   })
   .catch((e) => {
-    debug("failed");
-    console.error(e);
     setResult(TaskResult.Failed, e.message);
   });
