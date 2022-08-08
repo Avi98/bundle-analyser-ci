@@ -20,6 +20,14 @@
 	    }
 	],
 	"galleryFlags": ["Free", "Public"],
+	"screenshots":[{
+		"path": "assets/addVariables.png"
+	},{
+		"path":"assets/comment.png"
+	},{
+		"path":"assets/searchAddTask.png"
+	}
+],
 	"content": {
 		"details": {
 		  "path": "README.md"
@@ -33,6 +41,9 @@
 		  "uri": "https://github.com/Avi98/bundle-analyser-ci/blob/master/LICENSE"
 		},
 		"repository": {
+		  "uri": "https://github.com/Avi98/bundle-analyser-ci"
+		},
+		"home": {
 		  "uri": "https://github.com/Avi98/bundle-analyser-ci"
 		},
 		"issues": {
