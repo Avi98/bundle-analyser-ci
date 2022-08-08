@@ -19,6 +19,37 @@
 		"path": "task"
 	    }
 	],
+	"galleryFlags": ["Free", "Public"],
+	"screenshots":[{
+		"path": "assets/addVariables.png"
+	},{
+		"path":"assets/comment.png"
+	},{
+		"path":"assets/searchAddTask.png"
+	}
+],
+	"content": {
+		"details": {
+		  "path": "README.md"
+		}
+	      },
+	"links": {
+		"overview": {
+		  "uri": "https://github.com/Avi98/bundle-analyser-ci/blob/master/README.md"
+		},
+		"license": {
+		  "uri": "https://github.com/Avi98/bundle-analyser-ci/blob/master/LICENSE"
+		},
+		"repository": {
+		  "uri": "https://github.com/Avi98/bundle-analyser-ci"
+		},
+		"home": {
+		  "uri": "https://github.com/Avi98/bundle-analyser-ci"
+		},
+		"issues": {
+		  "uri": "https://github.com/Avi98/bundle-analyser-ci/issues"
+		}
+	      },
 	"contributions": [{
 		"id": "service-endpoint",
 		"description": "Service Endpoint type for CRA bundle-analyzer",
