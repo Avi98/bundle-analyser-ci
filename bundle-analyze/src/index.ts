@@ -25,7 +25,7 @@ const staticFilePattern = !isDev
 
 const staticFilesPath = path.join(buildDir, staticFilePattern);
 
-console.log({ version: "0.0.15" });
+console.log({ version: "0.0.16" });
 
 sourceMapRunner(staticFilesPath)
   .then((res: any) => JSON.parse(res))

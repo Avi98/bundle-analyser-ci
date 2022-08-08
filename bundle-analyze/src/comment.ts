@@ -122,8 +122,11 @@ export class Comment {
           thread.comments &&
           thread.properties["bundle-analysis"] &&
           thread.id &&
-          !this.isThreadEmpty(thread.comments)
+          !this.isThreadEmpty(thread.comments) &&
+          thread.comments[0].id
         ) {
+          delete commentPayload.properties;
+
           await this.updateExistingThread(
             pullReqId,
             repoId,

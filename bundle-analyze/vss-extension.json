@@ -1,9 +1,9 @@
 {
 	"manifestVersion": 1,
 	"id": "1629514b-06c5-4f3e-8a62-dc1c498f1726",
-	"name": "Bundle-Analyzer",
-	"version": "0.0.15",
-	"publisher": "pref-monitor-ci",
+	"name": "Bundle Analyzer",
+	"version": "0.0.1",
+	"publisher": "bundle-report",
 	"targets": [
 	    {
 		"id": "Microsoft.VisualStudio.Services"
@@ -12,7 +12,7 @@
 	"description": "Get bundle analysis of your react app in CI/CD pipeline",
 	"categories": ["Azure Pipelines"],
 	"icons": {
-	    "default": "vss-extension-icon.png"        
+	    "default": "vss-extension-icon.jpg"        
 	},
 	"files": [
 	    {
