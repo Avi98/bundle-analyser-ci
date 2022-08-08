@@ -1,0 +1,31 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "node",
+			"env": {
+				"PORT":"4000"
+			},
+			"envFile": "${workspaceFolder}/bundle-analyze/.env",
+			"request": "launch",
+			"name": "Launch Program",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/bundle-analyze/src/index.ts",
+			"preLaunchTask": "tsc: build - bundle-analyze/tsconfig.json",
+			"outFiles": [
+				"${workspaceFolder}/bundle-analyze/.bin/task/*.js"
+			],
+			"resolveSourceMapLocations":[
+				"${workspaceFolder}/bundle-analyze/.bin/tasks/**",
+				"!**/bundle-analyze/node_modules/**"
+			],
+			"sourceMaps": true,
+			"smartStep": true
+		}
+	]
+}

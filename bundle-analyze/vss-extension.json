@@ -1,9 +1,9 @@
 {
 	"manifestVersion": 1,
-	"id": "5fe3e030-1add-6a2c-89b1-3dc0949111c0",
-	"name": "React app's bundle analyzer",
+	"id": "1629514b-06c5-4f3e-8a62-dc1c498f1726",
+	"name": "Bundle Analyzer",
 	"version": "0.0.1",
-	"publisher": "Avinash",
+	"publisher": "bundle-report",
 	"targets": [
 	    {
 		"id": "Microsoft.VisualStudio.Services"
@@ -12,23 +12,56 @@
 	"description": "Get bundle analysis of your react app in CI/CD pipeline",
 	"categories": ["Azure Pipelines"],
 	"icons": {
-	    "default": "vss-extension-icon.png"        
+	    "default": "vss-extension-icon.jpg"        
 	},
 	"files": [
 	    {
 		"path": "task"
 	    }
 	],
-	"contributions": [
+	"contributions": [{
+		"id": "service-endpoint",
+		"description": "Service Endpoint type for CRA bundle-analyzer",
+		"type": "ms.vss-endpoint.service-endpoint-type",
+		"targets": [ "ms.vss-endpoint.endpoint-types" ],
+		"properties": {
+		  "name": "CRA-bundle",
+		  "displayName": "Bundle analyzer connection",
+		  "url": {
+			"displayName": "Server Url",
+			"helpText": "URL for Project server to connect to"
+		      },
+		  "authenticationSchemes": [
+		    {
+		      "type": "ms.vss-endpoint.endpoint-auth-scheme-none",
+		      "inputDescriptors": [
+			{
+			  "id": "pat",
+			  "name": "PAT",
+			  "description": "Azure DevOps Personal Access Token here.",
+			  "inputMode": "passwordbox",
+			  "isConfidential": true,
+			  "validation": {
+			    "isRequired": true,
+			    "dataType": "string"
+			  }
+			}
+		      ]
+		    }
+		  ],
+		  "helpMarkDown": "Create a Pull Request Comment."
+		}
+	      },
 	    {
-		"id": "",
+		"id": "custom-build-release-task",
 		"type": "ms.vss-distributed-task.task",
 		"targets": [
 		    "ms.vss-distributed-task.tasks"
 		],
 		"description":"Get bundle analysis of your react app in CI/CD pipeline",
 		"properties": {
-		    "title": "View bundle report in PR comments"
+		    "title": "View bundle report in PR comments",
+		    "name":"task"
 		}
 	    }
 	]
