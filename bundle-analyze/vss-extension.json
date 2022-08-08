@@ -50,6 +50,10 @@
 		  "uri": "https://github.com/Avi98/bundle-analyser-ci/issues"
 		}
 	      },
+	"repository": {
+		"type": "git",
+		"uri": "https://github.com/Avi98/bundle-analyser-ci"
+	      },
 	"contributions": [{
 		"id": "service-endpoint",
 		"description": "Service Endpoint type for CRA bundle-analyzer",
